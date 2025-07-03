@@ -68,6 +68,12 @@ export default function Home() {
             >
               Try Webhook Version →
             </Link>
+            <Link 
+              href="/training"
+              className="px-4 py-2 bg-purple-100 hover:bg-purple-200 text-purple-700 rounded-lg transition-colors"
+            >
+              🎯 Train LoRA Model
+            </Link>
           </div>
         </div>
 
@@ -174,8 +180,8 @@ export default function Home() {
               className="inline-block bg-green-500 hover:bg-green-600 text-white font-semibold py-3 px-6 rounded-xl transition-colors"
             >
               Download Image
-            </a>
-          </div>
+          </a>
+        </div>
         )}
       </div>
     </div>

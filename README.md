@@ -23,13 +23,27 @@
    npm install
    ```
 
-3. Create a `.env.local` file in the root directory and add your FAL API key:
+3. Create a `.env.local` file in the root directory and add the following variables:
    ```
+   # FAL AI API Key
    FAL_KEY=your_fal_key_here
+   
+   # App URL for webhooks (use ngrok URL for local development)
    NEXT_PUBLIC_APP_URL=http://localhost:3000
+   
+   # Supabase Configuration (for training functionality)
+   NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+   SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key
    ```
    
-   Get your API key from [FAL AI Dashboard](https://fal.ai/dashboard)
+   **Required for all features:**
+   - Get your FAL API key from [FAL AI Dashboard](https://fal.ai/dashboard)
+   
+   **Required for training features:**
+   - Create a Supabase project at [supabase.com](https://supabase.com)
+   - Get your project URL and keys from the Supabase dashboard
+   - Run the migration file `supabase/migrations/001_create_training_tables.sql` in your Supabase SQL editor
    
    **Note**: For webhook functionality in production, set `NEXT_PUBLIC_APP_URL` to your deployed domain.
 
