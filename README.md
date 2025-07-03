@@ -12,6 +12,8 @@ A Next.js application for generating images using the FLUX.1 AI model with a sec
 - 🔄 Queue-based generation with real-time polling
 - 📊 Live status updates and generation logs
 - ❌ Request cancellation support
+- 🪝 Webhook-based generation for efficient async processing
+- 🔐 Secure webhook signature verification
 
 ## Setup
 
@@ -24,9 +26,12 @@ A Next.js application for generating images using the FLUX.1 AI model with a sec
 3. Create a `.env.local` file in the root directory and add your FAL API key:
    ```
    FAL_KEY=your_fal_key_here
+   NEXT_PUBLIC_APP_URL=http://localhost:3000
    ```
    
    Get your API key from [FAL AI Dashboard](https://fal.ai/dashboard)
+   
+   **Note**: For webhook functionality in production, set `NEXT_PUBLIC_APP_URL` to your deployed domain.
 
 4. Run the development server:
    ```bash
@@ -44,10 +49,33 @@ This application uses a server-side proxy to securely handle API requests to FAL
 - **Frontend**: React with TypeScript and Tailwind CSS
 - **Backend**: Next.js API routes with proxy functionality
 - **AI Service**: FAL AI FLUX.1 model for image generation
+- **Queue System**: Support for both polling and webhook-based processing
+- **Webhook Security**: ED25519 signature verification for webhook authenticity
+
+## Pages
+
+- **/** - Main page with polling-based queue management
+- **/webhook** - Alternative page demonstrating webhook-based processing
+
+## Webhook vs Polling
+
+### Polling (Default)
+- Real-time status updates every 2 seconds
+- Live logs and queue position
+- Great for interactive use cases
+- Higher server resource usage
+
+### Webhook
+- Efficient async processing
+- No continuous polling required
+- Perfect for batch processing
+- Lower server resource usage
+- Requires publicly accessible webhook endpoint
 
 ## Branches
 
 - `html-only`: Simple HTML/CSS/JS version with client-side API calls
 - `main`: Next.js application with server-side proxy
 - `proxy`: Complete application with server-side proxy
-- `queue-polling`: Advanced version with queue management and real-time polling (current)
+- `queue-polling`: Advanced version with queue management and real-time polling
+- `queue-webhook`: Most advanced version with webhook-based async processing (current)

@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useQueuePolling } from '@/hooks/useQueuePolling';
+import Link from 'next/link';
 
 export default function Home() {
   const [prompt, setPrompt] = useState('');
@@ -57,9 +58,17 @@ export default function Home() {
           <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-3">
             FLUX.1 Image Generator
           </h1>
-          <p className="text-gray-600 text-lg">
+          <p className="text-gray-600 text-lg mb-4">
             Create stunning images with AI-powered text-to-image generation
           </p>
+          <div className="flex gap-4 justify-center">
+            <Link 
+              href="/webhook"
+              className="px-4 py-2 bg-green-100 hover:bg-green-200 text-green-700 rounded-lg transition-colors"
+            >
+              Try Webhook Version →
+            </Link>
+          </div>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
