@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirm Email Change</title>
+</head>
+<body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif; background-color: #f8fafc; color: #334155;">
+    <div style="max-width: 600px; margin: 0 auto; padding: 40px 20px;">
+        <div style="background: linear-gradient(135deg, #0891b2 0%, #0e7490 100%); padding: 30px; border-radius: 16px 16px 0 0; text-align: center;">
+            <h1 style="color: white; margin: 0; font-size: 28px; font-weight: 700;">FLUX.1 Image Generator</h1>
+            <p style="color: rgba(255, 255, 255, 0.9); margin: 10px 0 0 0; font-size: 16px;">Email Change Request</p>
+        </div>
+        
+        <div style="background: white; padding: 40px; border-radius: 0 0 16px 16px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);">
+            <h2 style="color: #1e293b; margin: 0 0 20px 0; font-size: 24px; font-weight: 600;">📧 Confirm Email Change</h2>
+            
+            <p style="color: #475569; font-size: 16px; line-height: 1.6; margin: 0 0 20px 0;">
+                You requested to change your email address for your FLUX.1 account. 
+                Please confirm this change by clicking the button below.
+            </p>
+            
+            <div style="background: #f0f9ff; padding: 20px; border-radius: 12px; margin: 20px 0; border-left: 4px solid #0891b2;">
+                <p style="color: #475569; font-size: 14px; margin: 0 0 8px 0; font-weight: 500;">
+                    Current email: <span style="color: #1e293b; font-weight: 600;">{{ .Email }}</span>
+                </p>
+                <p style="color: #475569; font-size: 14px; margin: 0; font-weight: 500;">
+                    New email: <span style="color: #0891b2; font-weight: 600;">{{ .NewEmail }}</span>
+                </p>
+            </div>
+            
+            <div style="text-align: center; margin: 30px 0;">
+                <a href="{{ .ConfirmationURL }}" 
+                   style="background: linear-gradient(135deg, #0891b2 0%, #0e7490 100%); 
+                          color: white; 
+                          padding: 14px 32px; 
+                          text-decoration: none; 
+                          border-radius: 12px; 
+                          font-weight: 600; 
+                          font-size: 16px; 
+                          display: inline-block; 
+                          box-shadow: 0 4px 12px rgba(8, 145, 178, 0.3);
+                          transition: all 0.2s ease;">
+                    Confirm Email Change
+                </a>
+            </div>
+            
+            <div style="background: #f0f9ff; padding: 20px; border-radius: 12px; margin: 20px 0; border-left: 4px solid #0891b2;">
+                <p style="color: #475569; font-size: 14px; margin: 0 0 10px 0; font-weight: 600;">
+                    Alternative: Use this confirmation code:
+                </p>
+                <p style="color: #1e293b; font-size: 24px; font-weight: 700; font-family: 'Courier New', monospace; margin: 0; letter-spacing: 2px;">
+                    {{ .Token }}
+                </p>
+            </div>
+            
+            <div style="background: #fef3c7; padding: 16px; border-radius: 8px; margin: 20px 0;">
+                <p style="color: #92400e; font-size: 14px; margin: 0; font-weight: 500;">
+                    ⏰ This confirmation link will expire in 1 hour for security purposes.
+                </p>
+            </div>
+            
+            <div style="background: #fef2f2; padding: 20px; border-radius: 12px; margin: 20px 0;">
+                <h3 style="color: #dc2626; margin: 0 0 10px 0; font-size: 16px; font-weight: 600;">🔒 Security Notice:</h3>
+                <p style="color: #475569; font-size: 14px; margin: 0; line-height: 1.5;">
+                    After confirming this change, you'll need to use your new email address to sign in. 
+                    Make sure you have access to <strong>{{ .NewEmail }}</strong> before proceeding.
+                </p>
+            </div>
+            
+            <div style="border-top: 1px solid #e2e8f0; padding-top: 20px; margin-top: 30px;">
+                <p style="color: #64748b; font-size: 14px; line-height: 1.5; margin: 0;">
+                    If you didn't request this email change, please ignore this message and contact our support team immediately. 
+                    Your current email address will remain unchanged.
+                </p>
+            </div>
+            
+            <div style="text-align: center; margin-top: 30px;">
+                <p style="color: #94a3b8; font-size: 12px; margin: 0;">
+                    © 2024 FLUX.1 Image Generator. All rights reserved.
+                </p>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 

@@ -47,12 +47,69 @@
    
    **Note**: For webhook functionality in production, set `NEXT_PUBLIC_APP_URL` to your deployed domain.
 
-4. Run the development server:
+4. **Configure Supabase Email Templates** (Important for user authentication):
+   
+   Go to your Supabase Dashboard → Authentication → Email Templates and customize the following templates:
+
+   **Confirm Signup Template:**
+   ```html
+   <h2>Welcome to FLUX.1 Image Generator!</h2>
+   <p>Thank you for signing up. Please confirm your email address to get started.</p>
+   <p><a href="{{ .ConfirmationURL }}" style="background-color: #4F46E5; color: white; padding: 12px 24px; text-decoration: none; border-radius: 8px; display: inline-block;">Confirm Email</a></p>
+   <p>Or use this verification code: <strong>{{ .Token }}</strong></p>
+   <p>If you didn't create an account, you can safely ignore this email.</p>
+   ```
+
+   **Magic Link Template:**
+   ```html
+   <h2>Your Magic Link</h2>
+   <p>Click the link below to sign in to your account:</p>
+   <p><a href="{{ .ConfirmationURL }}" style="background-color: #059669; color: white; padding: 12px 24px; text-decoration: none; border-radius: 8px; display: inline-block;">Sign In</a></p>
+   <p>Or use this login code: <strong>{{ .Token }}</strong></p>
+   <p>This link will expire in 1 hour for security purposes.</p>
+   ```
+
+   **Reset Password Template:**
+   ```html
+   <h2>Reset Your Password</h2>
+   <p>We received a request to reset your password. Click the link below to create a new password:</p>
+   <p><a href="{{ .ConfirmationURL }}" style="background-color: #DC2626; color: white; padding: 12px 24px; text-decoration: none; border-radius: 8px; display: inline-block;">Reset Password</a></p>
+   <p>Or use this reset code: <strong>{{ .Token }}</strong></p>
+   <p>If you didn't request a password reset, you can safely ignore this email.</p>
+   ```
+
+   **Invite User Template:**
+   ```html
+   <h2>You're Invited!</h2>
+   <p>You've been invited to join FLUX.1 Image Generator. Click the link below to accept the invitation:</p>
+   <p><a href="{{ .ConfirmationURL }}" style="background-color: #7C3AED; color: white; padding: 12px 24px; text-decoration: none; border-radius: 8px; display: inline-block;">Accept Invitation</a></p>
+   <p>Welcome to our community of AI image creators!</p>
+   ```
+
+   **Change Email Template:**
+   ```html
+   <h2>Confirm Email Change</h2>
+   <p>You requested to change your email address to {{ .NewEmail }}.</p>
+   <p>Click the link below to confirm this change:</p>
+   <p><a href="{{ .ConfirmationURL }}" style="background-color: #0891B2; color: white; padding: 12px 24px; text-decoration: none; border-radius: 8px; display: inline-block;">Confirm Email Change</a></p>
+   <p>Or use this confirmation code: <strong>{{ .Token }}</strong></p>
+   ```
+
+   **Available Template Variables:**
+   - `{{ .ConfirmationURL }}` - The confirmation/action URL
+   - `{{ .Token }}` - 6-digit OTP code
+   - `{{ .TokenHash }}` - Hashed version of the token
+   - `{{ .SiteURL }}` - Your application's site URL
+   - `{{ .Email }}` - User's email address
+   - `{{ .NewEmail }}` - New email address (for email change)
+   - `{{ .Data }}` - User metadata (e.g., `{{ .Data.first_name }}`)
+
+5. Run the development server:
    ```bash
    npm run dev
    ```
 
-5. Open [http://localhost:3000](http://localhost:3000) in your browser
+6. Open [http://localhost:3000](http://localhost:3000) in your browser
 
 ## API Key Security
 
