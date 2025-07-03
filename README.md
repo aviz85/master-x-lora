@@ -1,6 +1,6 @@
-# FLUX.1 Image Generator
+# FLUX.1 Image Generator - Advanced Proxy Version
 
-A Next.js application for generating images using the FLUX.1 AI model with a secure server-side proxy.
+🎨 **Complete server-side proxy implementation** - Enhanced security and robust API handling.
 
 ## Features
 
@@ -42,8 +42,37 @@ This application uses a server-side proxy to securely handle API requests to FAL
 - **Backend**: Next.js API routes with proxy functionality
 - **AI Service**: FAL AI FLUX.1 model for image generation
 
-## Branches
+## Switching Between Versions
 
-- `html-only`: Simple HTML/CSS/JS version with client-side API calls
-- `main`: Next.js base setup
-- `proxy`: Complete application with server-side proxy (current)
+This repository contains multiple implementations. Switch between them using git branches:
+
+```bash
+# HTML Only - Simple client-side implementation
+git checkout html-only
+
+# Next.js Basic - Server-side API key protection
+git checkout main
+
+# Advanced Proxy (current) - Complete server-side implementation
+git checkout proxy  
+
+# Queue Polling - Real-time status updates and queue management
+git checkout queue-polling
+
+# Queue Webhook - Most advanced with webhook notifications
+git checkout queue-webhook
+```
+
+## Version Comparison
+
+| Feature | HTML Only | Main | Proxy | Queue Polling | Queue Webhook |
+|---------|-----------|------|-------|---------------|---------------|
+| Complexity | ⭐ | ⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ |
+| API Key Security | ❌ | ✅ | ✅ | ✅ | ✅ |
+| Real-time Updates | ❌ | ❌ | ❌ | ✅ | ✅ |
+| Queue Management | ❌ | ❌ | ❌ | ✅ | ✅ |
+| Webhook Support | ❌ | ❌ | ❌ | ❌ | ✅ |
+
+---
+
+**Next Step**: Try the [Queue Polling version](../../tree/queue-polling) with real-time updates!
