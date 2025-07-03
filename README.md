@@ -9,6 +9,9 @@ A Next.js application for generating images using the FLUX.1 AI model with a sec
 - 🎯 Simple and intuitive interface
 - 📱 Responsive design with Tailwind CSS
 - ⚡ Built with Next.js 15 and TypeScript
+- 🔄 Queue-based generation with real-time polling
+- 📊 Live status updates and generation logs
+- ❌ Request cancellation support
 
 ## Setup
 
@@ -45,5 +48,6 @@ This application uses a server-side proxy to securely handle API requests to FAL
 ## Branches
 
 - `html-only`: Simple HTML/CSS/JS version with client-side API calls
-- `main`: Next.js base setup
-- `proxy`: Complete application with server-side proxy (current)
+- `main`: Next.js application with server-side proxy
+- `proxy`: Complete application with server-side proxy
+- `queue-polling`: Advanced version with queue management and real-time polling (current)

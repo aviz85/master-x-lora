@@ -1,59 +1,52 @@
 'use client';
 
 import { useState } from 'react';
-import { fal } from '@fal-ai/client';
-
-// Configure the client to use our proxy
-fal.config({
-  proxyUrl: '/api/fal/proxy',
-});
+import { useQueuePolling } from '@/hooks/useQueuePolling';
 
 export default function Home() {
   const [prompt, setPrompt] = useState('');
   const [imageSize, setImageSize] = useState<string>('landscape_4_3');
-  const [isGenerating, setIsGenerating] = useState(false);
-  const [generatedImage, setGeneratedImage] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  
+  const {
+    isGenerating,
+    queueStatus,
+    result,
+    error,
+    logs,
+    submitToQueue,
+    cancelRequest,
+  } = useQueuePolling();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!prompt.trim()) {
-      setError('Please enter a description for your image.');
       return;
     }
 
-    setError(null);
-    setGeneratedImage(null);
-    setIsGenerating(true);
+    await submitToQueue(prompt, imageSize);
+  };
 
-    try {
-              const result = await fal.subscribe('fal-ai/flux/schnell', {
-          input: {
-            prompt: prompt.trim(),
-            image_size: imageSize as any,
-            num_inference_steps: 4,
-            num_images: 1,
-            enable_safety_checker: true
-          },
-        logs: true,
-        onQueueUpdate: (update) => {
-          if (update.status === 'IN_PROGRESS') {
-            console.log('Generation in progress...');
-          }
-        },
-      });
+  const handleCancel = () => {
+    if (queueStatus?.request_id) {
+      cancelRequest(queueStatus.request_id);
+    }
+  };
 
-      if (result.data.images && result.data.images.length > 0) {
-        setGeneratedImage(result.data.images[0].url);
-      } else {
-        throw new Error('No image was generated');
-      }
-    } catch (err) {
-      console.error('Error generating image:', err);
-      setError('Failed to generate image. Please try again.');
-    } finally {
-      setIsGenerating(false);
+  const getStatusMessage = () => {
+    if (!queueStatus) return '';
+    
+    switch (queueStatus.status) {
+      case 'IN_QUEUE':
+        return `In queue (position: ${queueStatus.queue_position || 0})`;
+      case 'IN_PROGRESS':
+        return 'Generating your image...';
+      case 'COMPLETED':
+        return 'Image generated successfully!';
+      case 'FAILED':
+        return 'Generation failed';
+      default:
+        return '';
     }
   };
 
@@ -116,7 +109,39 @@ export default function Home() {
         {isGenerating && (
           <div className="mt-8 text-center">
             <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mb-4"></div>
-            <p className="text-gray-600">Generating your image... This may take a few moments.</p>
+            <p className="text-gray-600 mb-4">{getStatusMessage()}</p>
+            
+            {queueStatus && queueStatus.status === 'IN_QUEUE' && (
+              <button
+                onClick={handleCancel}
+                className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-colors"
+              >
+                Cancel Request
+              </button>
+            )}
+            
+            {logs.length > 0 && (
+              <div className="mt-4 p-4 bg-gray-50 rounded-lg text-left max-h-32 overflow-y-auto">
+                <h4 className="font-semibold text-gray-700 mb-2">Generation Logs:</h4>
+                {logs.map((log, index) => (
+                  <div key={index} className="text-sm text-gray-600 mb-1">
+                    <span className="font-mono text-xs text-gray-500">
+                      {new Date(log.timestamp).toLocaleTimeString()}
+                    </span>
+                    {' '}
+                    <span className={`font-semibold ${
+                      log.level === 'ERROR' ? 'text-red-600' : 
+                      log.level === 'WARN' ? 'text-yellow-600' : 
+                      'text-blue-600'
+                    }`}>
+                      [{log.level}]
+                    </span>
+                    {' '}
+                    {log.message}
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         )}
 
@@ -126,15 +151,15 @@ export default function Home() {
           </div>
         )}
 
-        {generatedImage && (
+        {result && result.images && result.images.length > 0 && (
           <div className="mt-8 text-center">
             <img
-              src={generatedImage}
+              src={result.images[0].url}
               alt="Generated image"
               className="max-w-full h-auto rounded-2xl shadow-lg mb-4"
             />
             <a
-              href={generatedImage}
+              href={result.images[0].url}
               download="generated-image.png"
               className="inline-block bg-green-500 hover:bg-green-600 text-white font-semibold py-3 px-6 rounded-xl transition-colors"
             >
