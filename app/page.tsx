@@ -153,6 +153,7 @@ export default function Home() {
 
         {result && result.images && result.images.length > 0 && (
           <div className="mt-8 text-center">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={result.images[0].url}
               alt="Generated image"

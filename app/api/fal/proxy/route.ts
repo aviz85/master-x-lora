@@ -33,7 +33,7 @@ async function handleRequest(request: NextRequest) {
         { status: 412 }
       );
     }
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: `Invalid ${TARGET_URL_HEADER} header` },
       { status: 412 }

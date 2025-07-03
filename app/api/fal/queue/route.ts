@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 const FAL_QUEUE_BASE_URL = 'https://queue.fal.run';
-const FAL_URL_REG_EXP = /(\.|^)fal\.(run|ai)$/;
 
 function getFalKey(): string | undefined {
   return process.env.FAL_KEY;
