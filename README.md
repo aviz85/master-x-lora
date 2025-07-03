@@ -1,6 +1,6 @@
-# FLUX.1 Image Generator
+# FLUX.1 Image Generator - Queue Webhook Version
 
-A Next.js application for generating images using the FLUX.1 AI model with a secure server-side proxy.
+🎨 **Most advanced implementation with webhook notifications** - Efficient async processing with real-time webhook delivery.
 
 ## Features
 
@@ -112,10 +112,37 @@ For webhook functionality to work locally, you need to expose your local server 
 
 **Note**: Each time you restart ngrok, you'll get a new URL and need to update `NEXT_PUBLIC_APP_URL`.
 
-## Branches
+## Switching Between Versions
 
-- `html-only`: Simple HTML/CSS/JS version with client-side API calls
-- `main`: Next.js application with server-side proxy
-- `proxy`: Complete application with server-side proxy
-- `queue-polling`: Advanced version with queue management and real-time polling
-- `queue-webhook`: Most advanced version with webhook-based async processing (current)
+This repository contains multiple implementations. Switch between them using git branches:
+
+```bash
+# HTML Only - Simple client-side implementation
+git checkout html-only
+
+# Next.js Basic - Server-side API key protection
+git checkout main
+
+# Advanced Proxy - Complete server-side implementation
+git checkout proxy  
+
+# Queue Polling - Real-time status updates and queue management
+git checkout queue-polling
+
+# Queue Webhook (current) - Most advanced with webhook notifications
+git checkout queue-webhook
+```
+
+## Version Comparison
+
+| Feature | HTML Only | Main | Proxy | Queue Polling | Queue Webhook |
+|---------|-----------|------|-------|---------------|---------------|
+| Complexity | ⭐ | ⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ |
+| API Key Security | ❌ | ✅ | ✅ | ✅ | ✅ |
+| Real-time Updates | ❌ | ❌ | ❌ | ✅ | ✅ |
+| Queue Management | ❌ | ❌ | ❌ | ✅ | ✅ |
+| Webhook Support | ❌ | ❌ | ❌ | ❌ | ✅ |
+
+---
+
+**🎉 You're using the most advanced version!** This implementation includes all features from previous versions plus webhook notifications.
