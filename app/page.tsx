@@ -1,103 +1,148 @@
-import Image from "next/image";
+'use client';
+
+import { useState } from 'react';
+import { fal } from '@fal-ai/client';
+
+// Configure the client to use our proxy
+fal.config({
+  proxyUrl: '/api/fal/proxy',
+});
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const [prompt, setPrompt] = useState('');
+  const [imageSize, setImageSize] = useState<string>('landscape_4_3');
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [generatedImage, setGeneratedImage] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!prompt.trim()) {
+      setError('Please enter a description for your image.');
+      return;
+    }
+
+    setError(null);
+    setGeneratedImage(null);
+    setIsGenerating(true);
+
+    try {
+              const result = await fal.subscribe('fal-ai/flux/schnell', {
+          input: {
+            prompt: prompt.trim(),
+            image_size: imageSize as any,
+            num_inference_steps: 4,
+            num_images: 1,
+            enable_safety_checker: true
+          },
+        logs: true,
+        onQueueUpdate: (update) => {
+          if (update.status === 'IN_PROGRESS') {
+            console.log('Generation in progress...');
+          }
+        },
+      });
+
+      if (result.data.images && result.data.images.length > 0) {
+        setGeneratedImage(result.data.images[0].url);
+      } else {
+        throw new Error('No image was generated');
+      }
+    } catch (err) {
+      console.error('Error generating image:', err);
+      setError('Failed to generate image. Please try again.');
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-blue-500 via-purple-500 to-purple-700 flex items-center justify-center p-5">
+      <div className="bg-white rounded-3xl shadow-2xl p-10 max-w-2xl w-full">
+        <div className="text-center mb-10">
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-3">
+            FLUX.1 Image Generator
+          </h1>
+          <p className="text-gray-600 text-lg">
+            Create stunning images with AI-powered text-to-image generation
+          </p>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div>
+            <label htmlFor="prompt" className="block text-sm font-semibold text-gray-700 mb-2">
+              Image Description
+            </label>
+            <textarea
+              id="prompt"
+              value={prompt}
+              onChange={(e) => setPrompt(e.target.value)}
+              placeholder="Describe the image you want to generate... (e.g., A beautiful sunset over mountains with vibrant colors)"
+              className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:outline-none transition-colors resize-none"
+              rows={4}
+              required
+            />
+          </div>
+
+          <div>
+            <label htmlFor="imageSize" className="block text-sm font-semibold text-gray-700 mb-2">
+              Image Size
+            </label>
+            <select
+              id="imageSize"
+              value={imageSize}
+              onChange={(e) => setImageSize(e.target.value)}
+              className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:outline-none transition-colors bg-white"
+            >
+              <option value="square_hd">Square HD (1024x1024)</option>
+              <option value="square">Square (512x512)</option>
+              <option value="portrait_4_3">Portrait 4:3</option>
+              <option value="portrait_16_9">Portrait 16:9</option>
+              <option value="landscape_4_3">Landscape 4:3</option>
+              <option value="landscape_16_9">Landscape 16:9</option>
+            </select>
+          </div>
+
+          <button
+            type="submit"
+            disabled={isGenerating}
+            className="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-semibold py-4 px-6 rounded-xl transition-all duration-200 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+          >
+            {isGenerating ? 'Generating...' : 'Generate Image'}
+          </button>
+        </form>
+
+        {isGenerating && (
+          <div className="mt-8 text-center">
+            <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mb-4"></div>
+            <p className="text-gray-600">Generating your image... This may take a few moments.</p>
+          </div>
+        )}
+
+        {error && (
+          <div className="mt-6 p-4 bg-red-50 border border-red-200 rounded-xl">
+            <p className="text-red-700">{error}</p>
+          </div>
+        )}
+
+        {generatedImage && (
+          <div className="mt-8 text-center">
+            <img
+              src={generatedImage}
+              alt="Generated image"
+              className="max-w-full h-auto rounded-2xl shadow-lg mb-4"
+            />
+            <a
+              href={generatedImage}
+              download="generated-image.png"
+              className="inline-block bg-green-500 hover:bg-green-600 text-white font-semibold py-3 px-6 rounded-xl transition-colors"
+            >
+              Download Image
+            </a>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
