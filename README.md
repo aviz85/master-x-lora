@@ -72,6 +72,46 @@ This application uses a server-side proxy to securely handle API requests to FAL
 - Lower server resource usage
 - Requires publicly accessible webhook endpoint
 
+## Local Development with Webhooks
+
+For webhook functionality to work locally, you need to expose your local server to the internet since FAL AI needs to send webhook notifications to your endpoint.
+
+### Using ngrok (Recommended)
+
+1. **Install ngrok**:
+   ```bash
+   # macOS
+   brew install ngrok
+   
+   # Or download from https://ngrok.com/download
+   ```
+
+2. **Start your Next.js development server**:
+   ```bash
+   npm run dev
+   ```
+
+3. **In another terminal, expose your local server**:
+   ```bash
+   ngrok http 3000
+   ```
+
+4. **Copy the ngrok URL** (e.g., `https://abc123.ngrok.io`) and update your `.env.local`:
+   ```
+   NEXT_PUBLIC_APP_URL=https://abc123.ngrok.io
+   ```
+
+5. **Restart your development server** to pick up the new environment variable.
+
+### Testing Webhooks
+
+1. Go to `/webhook` page
+2. Submit an image generation request
+3. Check your terminal logs to see the webhook being received
+4. The webhook endpoint will log the incoming requests for debugging
+
+**Note**: Each time you restart ngrok, you'll get a new URL and need to update `NEXT_PUBLIC_APP_URL`.
+
 ## Branches
 
 - `html-only`: Simple HTML/CSS/JS version with client-side API calls

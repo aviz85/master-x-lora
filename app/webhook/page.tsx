@@ -156,6 +156,19 @@ export default function WebhookPage() {
             <li>• No need for continuous polling - more efficient!</li>
           </ul>
         </div>
+
+        <div className="mt-4 p-4 bg-yellow-50 rounded-lg">
+          <h3 className="font-semibold text-yellow-800 mb-2">🔧 Local Development:</h3>
+          <p className="text-sm text-yellow-700">
+            For local testing, use <strong>ngrok</strong> to expose your localhost to the internet:
+          </p>
+          <div className="mt-2 p-2 bg-yellow-100 rounded font-mono text-xs text-yellow-800">
+            ngrok http 3000
+          </div>
+          <p className="text-xs text-yellow-600 mt-1">
+            Then update NEXT_PUBLIC_APP_URL with your ngrok URL
+          </p>
+        </div>
       </div>
     </div>
   );
